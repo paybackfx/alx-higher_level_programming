@@ -1,3 +1,3 @@
 #!/usr/bin/python3
-
-print(", ".join("{:02d}".format(i) for i in range(0, 100)))
+for num in range(0, 100):
+    print("{:02d}".format(num), end='\n' if num == 99 else ", ")

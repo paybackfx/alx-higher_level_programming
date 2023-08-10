@@ -1,52 +1,55 @@
-#include "lists.h"
 #include <stdlib.h>
+#include "lists.h"
 
 /**
- * insert_node - inserts a number into a sorted singly linked list
- * @head: pointer to head of list
- * @number: number to insert
- * Return: address of new node or NULL if failed
-*/
+ * insert_node - Inserts a number into a sorted singly linked list.
+ *
+ * @head: Double pointer to a singly linked list
+ *
+ * @number: Value of the new node.
+ *
+ * Return: The address of the new node, or NULL if it failed.
+ */
+
 listint_t *insert_node(listint_t **head, int number)
 {
-    listint_t *new, *current;
+	int flag = 0;
+	listint_t *new_node = NULL, *actual = NULL, *after = NULL;
 
-    if (!head)
-        return (NULL);
-
-    new = malloc(sizeof(listint_t));
-    if (!new)
-        return (NULL);
-
-    new->n = number;
-
-    if (!*head)
-    {
-        new->next = NULL;
-        *head = new;
-        return (new);
-    }
-
-    current = *head;
-    if (current->n > number)
-    {
-        new->next = current;
-        *head = new;
-        return (new);
-    }
-
-    while (current->next)
-    {
-        if (current->next->n > number)
-        {
-            new->next = current->next;
-            current->next = new;
-            return (new);
-        }
-        current = current->next;
-    }
-
-    new->next = NULL;
-    current->next = new;
-    return (new);
+	if (head == NULL)
+		return (NULL);
+	new_node = malloc(sizeof(listint_t));
+	if (!new_node)
+		return (NULL);
+	new_node->n = number, new_node->next = NULL;
+	if (*head == NULL)
+	{
+		*head = new_node;
+		return (*head);
+	}
+	actual = *head;
+	if (number <= actual->n)
+	{
+		new_node->next = actual, *head = new_node;
+		return (*head);
+	}
+	if (number > actual->n && !actual->next)
+	{
+		actual->next = new_node;
+		return (new_node);
+	}
+	after = actual->next;
+	while (actual)
+	{
+		if (!after)
+			actual->next = new_node, flag = 1;
+		else if (after->n == number)
+			actual->next = new_node, new_node->next = after, flag = 1;
+		else if (after->n > number && actual->n < number)
+			actual->next = new_node, new_node->next = after, flag = 1;
+		if (flag)
+			break;
+		after = after->next, actual = actual->next;
+	}
+	return (new_node);
 }
